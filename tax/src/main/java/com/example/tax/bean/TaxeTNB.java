@@ -16,7 +16,6 @@ public class TaxeTNB {
     private Double total;
     private int tnbYear;
     private Double montantBase;
-
     @ManyToOne
     private Terrain terrain;
     @ManyToOne
@@ -25,6 +24,4 @@ public class TaxeTNB {
     private Categorie categorie;
     @ManyToOne
     private Taux taux;
-
-
 }

@@ -1,10 +1,12 @@
 package com.example.tax.bean;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 
 @Entity
@@ -17,5 +19,4 @@ public class Categorie {
     private Long id;
     private String label;
     private String description;
-
 }

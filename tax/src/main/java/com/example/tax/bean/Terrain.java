@@ -1,6 +1,5 @@
 package com.example.tax.bean;
 
-import com.example.tax.bean.Categorie;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -19,6 +19,6 @@ public class Redevable {
     private String nom;
     private String prenom;
     private String adresse;
-    @OneToMany(mappedBy = "redevable")
+    @OneToMany(mappedBy = "redevable", fetch = FetchType.LAZY)
     private List<Terrain> terrains;
 }

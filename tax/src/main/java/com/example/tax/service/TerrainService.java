@@ -1,26 +1,59 @@
 package com.example.tax.service;
 
+import com.example.tax.bean.Categorie;
+import com.example.tax.bean.Redevable;
 import com.example.tax.bean.Terrain;
+import com.example.tax.repository.CategorieDao;
+import com.example.tax.repository.RedevableDao;
 import com.example.tax.repository.TerrainDao;
+import com.example.tax.service.abs.IService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TerrainService {
+public class TerrainService implements IService<Terrain> {
 
     @Autowired
     private TerrainDao terrainDao;
+    @Autowired
+    private CategorieDao categorieDao;
+    @Autowired
+    private RedevableDao redevableDao;
 
-    public List<Terrain> findAll() {
-        return terrainDao.findAll();
+
+    @Override
+    public Page<Terrain> findAll(Pageable page) {
+        return terrainDao.findAll(page);
     }
 
     public Terrain save(Terrain terrain) {
+        //check category
+        Optional<Categorie> c = categorieDao.findById(terrain.getCategorie().getId());
+        if (c.isPresent()) {
+            terrain.setCategorie(c.get());
+        } else {
+            throw new RuntimeException("Category not found.");
+        }
+
+        //check Redevable
+        Optional<Redevable> r = redevableDao.findById(terrain.getCategorie().getId());
+        if (r.isPresent()) {
+            terrain.setRedevable(r.get());
+        } else {
+            throw new RuntimeException("Redevable not found.");
+        }
+
         return terrainDao.save(terrain);
+    }
+
+    @Override
+    public Terrain update(Terrain terrain) {
+        return null;
     }
 
     public Optional<Terrain> findById(Long id) {
