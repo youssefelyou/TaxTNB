@@ -1,23 +1,16 @@
-import { Route } from '@angular/router';
-import { initialDataResolver } from 'app/app.resolvers';
-import { AuthGuard } from 'app/core/auth/guards/auth.guard';
-import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
-import { LayoutComponent } from 'app/layout/layout.component';
+import {Route} from '@angular/router';
+import {initialDataResolver} from 'app/app.resolvers';
+import {AuthGuard} from 'app/core/auth/guards/auth.guard';
+import {NoAuthGuard} from 'app/core/auth/guards/noAuth.guard';
+import {LayoutComponent} from 'app/layout/layout.component';
 
 // @formatter:off
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'home'},
-
-    // Redirect signed-in user to the '/example'
-    //
-    // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'home'},
+    // Redirect empty path to '/sign-out'
+    {path: '', pathMatch : 'full', redirectTo: 'sign-out'},
 
     // Auth routes for guests
     {
@@ -52,29 +45,23 @@ export const appRoutes: Route[] = [
         ]
     },
 
-    // Landing routes
-    {
-        path: '',
-        component: LayoutComponent,
-        data: {
-            layout: 'empty'
-        },
-        children: [
-            {path: 'home', loadChildren: () => import('app/modules/landing/home/home.routes')},
-        ]
-    },
 
     // Admin routes
     {
         path: '',
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
+        data: {
+            layout: 'modern'
+            // layout: 'classy'
+        },
         component: LayoutComponent,
         resolve: {
             initialData: initialDataResolver
         },
         children: [
-            {path: 'admin/dashboard', loadChildren: () => import('app/modules/admin/example/example.routes')},
+            {path: 'admin', loadChildren: () => import('app/modules/admin/admin.routes')},
+            {path: 'client', loadChildren: () => import('app/modules/client/client.routes')},
         ]
     }
 ];

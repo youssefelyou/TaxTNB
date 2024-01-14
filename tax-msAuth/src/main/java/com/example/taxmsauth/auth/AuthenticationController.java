@@ -49,15 +49,10 @@ public class AuthenticationController {
 
     @PostMapping("/sign-in-with-token")
     public ResponseEntity<User> sign_in_using_token(@RequestBody TokenVo token) {
-        System.out.println("token.getAccessToken() = " + token.getAccessToken());
-        if (token != null) {
-            String usernameFromToken = jwtService.extractUsername(token.getAccessToken());
-            User user = userService.findUserByUsername(usernameFromToken);
-            if (user != null) return new ResponseEntity<>(user, OK);
-        }
+        String usernameFromToken = jwtService.extractUsername(token.getAccessToken());
+        User user = userService.findUserByUsername(usernameFromToken);
+        if (user != null) return new ResponseEntity<>(user, OK);
         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
-
-
 }
 

@@ -101,18 +101,13 @@ export class AuthService {
                 // Return false
                 of(false),
             ),
-            switchMap((response: any) => {
+            switchMap((response: User) => {
                 console.log(response)
-                if (response.accessToken) {
-                    this.accessToken = response.accessToken;
-                }
-
                 // Set the authenticated flag to true
                 this._authenticated = true;
-
                 // Store the user on the user service
-                this._userService.user = response.user;
-
+                this._userService.user = response;
+                this._user = response;
                 // Return true
                 return of(true);
             }),
