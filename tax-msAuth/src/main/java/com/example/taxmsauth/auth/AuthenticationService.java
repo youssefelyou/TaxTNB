@@ -9,6 +9,7 @@ import com.example.taxmsauth.token.Token;
 import com.example.taxmsauth.token.TokenRepository;
 import com.example.taxmsauth.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,15 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).username(request.getEmail()).tel(request.getTel()).password(passwordEncoder.encode(request.getPassword())).role(Role.CLIENT).build();
+        var user = User.builder().firstName(request.getFirstName())
+                .lastName(request.getLastName()).email(request.getEmail())
+                .cin(request.getCin())
+                .username(request.getEmail()).tel(request.getTel())
+                .password(passwordEncoder.encode(request.getPassword())).role(Role.CLIENT).build();
         System.out.println(user);
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -43,7 +48,9 @@ public class AuthenticationService {
         String jsonString = String.valueOf(user.getRole());
         saveUserToken(savedUser, jwtToken);
         //sent notification to a TNB project to create Redevable from user
-        this.kafkaTemplate.send("redevable", savedUser);
+        String data = new Gson().toJson(savedUser);
+        System.out.println(data);
+        this.kafkaTemplate.send("redevable", data);
         return AuthenticationResponse.builder().accessToken(jwtToken).role(jsonString).refreshToken(refreshToken).build();
     }
 
