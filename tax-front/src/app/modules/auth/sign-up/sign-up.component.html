@@ -38,7 +38,6 @@
                 <mat-form-field class="w-full">
                     <mat-label>First Name</mat-label>
                     <input
-                        id="name"
                         matInput
                         [formControlName]="'firstname'">
                     <mat-error *ngIf="signUpForm.get('firstname').hasError('required')">

@@ -83,4 +83,8 @@ public class TerrainService implements IService<Terrain> {
     public List<Terrain> findByRedevableId(Long id) {
         return terrainDao.findByRedevableId(id);
     }
+
+    public List<Terrain> findByRedevableCin(String  id) {
+        return terrainDao.findByRedevableCin(id);
+    }
 }
