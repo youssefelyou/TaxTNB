@@ -1,7 +1,6 @@
 package com.example.taxmsauth.auth;
 
 
-
 import com.example.taxmsauth.bean.Role;
 import com.example.taxmsauth.bean.User;
 import com.example.taxmsauth.config.JwtService;
@@ -9,12 +8,13 @@ import com.example.taxmsauth.dao.UserDao;
 import com.example.taxmsauth.token.Token;
 import com.example.taxmsauth.token.TokenRepository;
 import com.example.taxmsauth.token.TokenType;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,26 +30,21 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .username(request.getEmail())
-                .tel(request.getTel())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CLIENT).build();
+        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).username(request.getEmail()).tel(request.getTel()).password(passwordEncoder.encode(request.getPassword())).role(Role.CLIENT).build();
         System.out.println(user);
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         String jsonString = String.valueOf(user.getRole());
         saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder().accessToken(jwtToken)
-                .role(jsonString)
-                .refreshToken(refreshToken).build();
+        //sent notification to a TNB project to create Redevable from user
+        this.kafkaTemplate.send("redevable", savedUser);
+        return AuthenticationResponse.builder().accessToken(jwtToken).role(jsonString).refreshToken(refreshToken).build();
     }
 
 
@@ -63,9 +58,7 @@ public class AuthenticationService {
         // Convert the object to a JSON string
         String jsonString = String.valueOf(user.getRole());
         System.out.println(jsonString);
-        return AuthenticationResponse.builder().accessToken(jwtToken)
-                .role(jsonString)
-                .refreshToken(refreshToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).role(jsonString).refreshToken(refreshToken).build();
     }
 
     private void saveUserToken(User user, String jwtToken) {

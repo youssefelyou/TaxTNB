@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,11 @@ public class RedevableService implements IService<Redevable> {
     @Override
     public Page<Redevable> findAll(Pageable page) {
         return redevableDao.findAll(page);
+    }
+
+    @Override
+    public List<Redevable> findAll() {
+        return redevableDao.findAll();
     }
 
     public Redevable save(Redevable redevable) {

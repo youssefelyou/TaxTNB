@@ -1,5 +1,6 @@
 package com.example.tax.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,6 @@ public class Redevable {
     private String prenom;
     private String adresse;
     @OneToMany(mappedBy = "redevable", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Terrain> terrains;
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,11 @@ public class TaxeService implements IService<TaxeTNB> {
     @Override
     public Page<TaxeTNB> findAll(Pageable page) {
         return taxeDao.findAll(page);
+    }
+
+    @Override
+    public List<TaxeTNB> findAll() {
+        return taxeDao.findAll();
     }
 
     public TaxeTNB save(TaxeTNB taxeTNB) {

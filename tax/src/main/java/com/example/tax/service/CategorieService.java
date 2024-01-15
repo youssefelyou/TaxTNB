@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,11 @@ public class CategorieService implements IService<Categorie> {
     @Override
     public Page<Categorie> findAll(Pageable page) {
         return categorieDao.findAll(page);
+    }
+
+    @Override
+    public List<Categorie> findAll() {
+        return categorieDao.findAll();
     }
 
 

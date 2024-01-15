@@ -1,0 +1,96 @@
+<div
+    class=" inset-0 flex w-full flex-col min-w-0 overflow-y-auto"
+    cdkScrollable>
+
+    <!-- Header -->
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none"
+             viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- @formatter:on -->
+        <div class="z-10 relative flex flex-col items-center">
+            <h2 class="text-xl font-semibold">Gestion des terrains</h2>
+            <div class="mt-1 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight text-center">
+                Votre Terrain
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex bg-white flex-auto p-6 sm:p-10">
+        <div class="flex flex-col flex-auto w-full max-w-xs sm:max-w-5xl mx-auto">
+            <!-- Filters -->
+            <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none">
+
+                <mat-form-field
+                    class="w-full sm:w-72 mt-4 fuse-mat-rounded fuse-mat-dense fuse-mat-bold sm:mt-0 sm:ml-4"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-select
+                    >
+                        <mat-option [value]="'all'">Tous</mat-option>
+                        <ng-container *ngFor="let item of categories">
+                            <mat-option [value]="item">{{item?.label}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-flat-button (click)="openCreate()" color="primary">NEW</button>
+            </div>
+
+            <div class="w-full my-5 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 bg-white ">
+
+                <ng-container *ngIf="terrains?.length > 0">
+                    <fuse-card *ngFor="let item of terrains" class="flex flex-col md:flex-row   w-full filter-listing">
+                        <div class="flex-0 w-60 md:w-40">
+                            <img
+                                class="w-full h-full object-cover"
+                                src="assets/images/cards/coffee-shop-02-512x512.jpg"
+                                alt="Card cover image">
+                        </div>
+                        <div class="flex flex-col flex-auto m-8 mb-4">
+                            <div class="text-2xl font-semibold leading-tight">{{item?.nom}}</div>
+                            <div class="flex items-center leading-none mt-2 -ml-1">
+                                <div class="flex items-center">
+                                    <strong>{{item?.redevable?.prenom}}</strong>
+                                    <strong>{{item?.redevable?.nom}}</strong>
+                                </div>
+                                <div class="text-secondary ml-2">{{item?.surface}} M</div>
+                                <div class="text-secondary mx-2">&bull;</div>
+                                <div class="text-secondary">{{item?.categorie?.label}}</div>
+                            </div>
+                            <div class="mt-6">
+                                {{item?.description}}
+                            </div>
+                            <div class="flex items-center mt-3 -mx-3">
+                                <a
+                                    class="px-3 mr-1"
+                                    mat-button
+                                    [color]="'primary'"
+                                    [routerLink]="['./']">
+                                    Location
+                                </a>
+                                <a class="px-3"
+                                   mat-button
+                                   [color]="'primary'"
+                                   [routerLink]="['./']">
+                                    Taxes
+                                </a>
+                            </div>
+                        </div>
+                    </fuse-card>
+
+                </ng-container>
+
+                <ng-container *ngIf="terrains?.length === 0">
+
+                </ng-container>
+
+            </div>
+        </div>
+    </div>
+</div>

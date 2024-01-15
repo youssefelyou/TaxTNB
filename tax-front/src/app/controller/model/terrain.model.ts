@@ -6,6 +6,6 @@ export class Terrain {
     public surface: number
     public nom: string
     public description: string
-    public categorie: Categorie
-    public redevable: Redevable
+    public categorie: Categorie = new Categorie()
+    public redevable: Redevable = new Redevable()
 }

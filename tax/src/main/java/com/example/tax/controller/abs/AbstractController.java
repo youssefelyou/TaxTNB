@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AbstractController<T, SERV extends IService<T>> {
@@ -14,9 +15,14 @@ public class AbstractController<T, SERV extends IService<T>> {
         this.service = service;
     }
 
-    @GetMapping("all")
+    @GetMapping("page")
     public Page<T> findAll(@RequestParam(defaultValue = "0", required = false) int page, @RequestParam(defaultValue = "10", required = false) int size) {
         return service.findAll(PageRequest.of(page, size));
+    }
+
+    @GetMapping("all")
+    public List<T> findAll() {
+        return service.findAll();
     }
 
     @PostMapping("save")

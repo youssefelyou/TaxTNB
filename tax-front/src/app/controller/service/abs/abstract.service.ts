@@ -11,12 +11,21 @@ import {environment} from "../../../../environments/environment";
 })
 export abstract class AbstractService<T> {
     protected API = environment.URL;
+    private _list: Array<T> = new Array<T>()
 
     protected constructor(API: string, public authService: AuthService,
                           public http: HttpClient) {
         this.API += API;
     }
 
+
+    get list(): Array<T> {
+        return this._list;
+    }
+
+    set list(value: Array<T>) {
+        this._list = value;
+    }
 
     create(d: T): Observable<T> {
         return this.http.post<T>(this.API + 'save', d);
@@ -37,12 +46,18 @@ export abstract class AbstractService<T> {
 
 
     findAll(pageable: Pageable): Observable<Criteria<T>> {
-        return this.http.get<Criteria<T>>(this.API + `all`, {
+        return this.http.get<Criteria<T>>(this.API + `page`, {
             params: {
                 'page': pageable.page,
                 'size': pageable.size
             }
         });
+    }
+
+    getAll() {
+        this.http.get<Array<T>>(this.API + `all`).subscribe(res => {
+            this.list = res
+        })
     }
 
 

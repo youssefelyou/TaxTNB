@@ -1,9 +1,10 @@
-package com.example.stageinnov.config;
+package com.example.taxmsauth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 public class CorsConfiguration {
     @Bean
@@ -13,10 +14,8 @@ public class CorsConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("Access-Control-Allow-Origin","*")
-                        .allowedOrigins(
-
-                "http://localhost:3000","https://https://stage-front.vercel.app//");
+                        .allowedHeaders("Access-Control-Allow-Origin", "*")
+                        .allowedOrigins("http://localhost:4200");
 
             }
         };

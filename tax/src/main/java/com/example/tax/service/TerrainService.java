@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,11 @@ public class TerrainService implements IService<Terrain> {
         return terrainDao.findAll(page);
     }
 
+    @Override
+    public List<Terrain> findAll() {
+        return terrainDao.findAll();
+    }
+
     public Terrain save(Terrain terrain) {
         //check category
         Optional<Categorie> c = categorieDao.findById(terrain.getCategorie().getId());
@@ -41,11 +47,16 @@ public class TerrainService implements IService<Terrain> {
         }
 
         //check Redevable
-        Optional<Redevable> r = redevableDao.findById(terrain.getCategorie().getId());
+        Optional<Redevable> r = redevableDao.findById(terrain.getRedevable().getId());
         if (r.isPresent()) {
             terrain.setRedevable(r.get());
         } else {
-            throw new RuntimeException("Redevable not found.");
+            // create Redevavle
+            Redevable rd = new Redevable();
+            rd.setPrenom(terrain.getRedevable().getPrenom());
+            rd.setNom(terrain.getRedevable().getNom());
+            rd = redevableDao.save(rd);
+            terrain.setRedevable(rd);
         }
 
         return terrainDao.save(terrain);
@@ -67,5 +78,9 @@ public class TerrainService implements IService<Terrain> {
 
     public Terrain findByNom(String nom) {
         return terrainDao.findByNom(nom);
+    }
+
+    public List<Terrain> findByRedevableId(Long id) {
+        return terrainDao.findByRedevableId(id);
     }
 }
