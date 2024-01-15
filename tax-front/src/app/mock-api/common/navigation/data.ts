@@ -60,4 +60,6 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         icon: 'heroicons_outline:chart-pie',
         link: '/client/home'
     },
+
+
 ];

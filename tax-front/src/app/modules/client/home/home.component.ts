@@ -13,6 +13,7 @@ import {Pageable} from "../../../controller/dto/Pageable";
 import {Categorie} from "../../../controller/model/categorie.model";
 import {CategorieService} from "../../../controller/service/categorie.service";
 import {NgForOf, NgIf} from "@angular/common";
+import {CategoryComponent} from "../category/category";
 
 @Component({
     selector: 'app-home',
@@ -48,6 +49,15 @@ export class HomeComponent implements OnInit {
 
     openCreate() {
         const dialogRef = this.dialog.open(CreateTerrainComponent);
+        dialogRef.afterClosed().subscribe(result => {
+            if (result === 'success') {
+                this.fetch_data()
+            }
+        });
+    }
+
+    openCreateCategory() {
+        const dialogRef = this.dialog.open(CategoryComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result === 'success') {
                 this.fetch_data()
