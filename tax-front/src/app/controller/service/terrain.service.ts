@@ -15,8 +15,8 @@ export class TerrainService extends AbstractService<Terrain> {
         super('terrain/', auth, http);
     }
 
-    public find_by_redevable(id): Observable<Terrain[]> {
-        return this.http.get<Terrain[]>(this.API + `redevable/id/${id}`)
+    public find_by_redevable(cin): Observable<Terrain[]> {
+        return this.http.get<Terrain[]>(this.API + `redevable/cin/${cin}`)
     }
 
 }

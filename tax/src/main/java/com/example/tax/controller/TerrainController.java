@@ -22,4 +22,9 @@ public class TerrainController extends AbstractController<Terrain, TerrainServic
     public List<Terrain> findByRedevableId(@PathVariable Long id) {
         return service.findByRedevableId(id);
     }
+
+    @GetMapping("redevable/cin/{cin}")
+    public List<Terrain> findByRedevableCin(@PathVariable String cin) {
+        return service.findByRedevableCin(cin);
+    }
 }

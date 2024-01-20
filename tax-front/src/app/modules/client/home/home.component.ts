@@ -71,9 +71,10 @@ export class HomeComponent implements OnInit {
     }
 
     private fetch_data() {
-        this.service.find_by_redevable(this.catService.authService._user.id).subscribe(res => {
-            this.terrains = res
-            console.log(res)
-        })
+        this.service.find_by_redevable(this.catService.authService._user.cin)
+            .subscribe(res => {
+                this.terrains = res
+                console.log(res)
+            })
     }
 }

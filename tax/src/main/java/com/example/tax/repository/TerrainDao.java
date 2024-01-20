@@ -11,6 +11,7 @@ public interface TerrainDao extends JpaRepository<Terrain, Long> {
     Terrain findByNom(String nom);
 
     List<Terrain> findByRedevableId(Long id);
+    List<Terrain> findByRedevableCin(String id);
 
 }
 

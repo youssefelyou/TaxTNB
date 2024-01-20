@@ -1,19 +1,34 @@
 package com.example.tax.listeners;
 
+import com.example.tax.bean.Redevable;
 import com.example.tax.dto.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.tax.repository.RedevableDao;
+import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaListeners {
+    @Autowired
+    private RedevableDao redevableDao;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
-    Logger log = LoggerFactory.getLogger(KafkaListeners.class);
 
     @KafkaListener(topics = "redevable", groupId = "kf-group-1")
-    void redevable_listener(User data) {
-        log.debug(data.toString());
+    void redevable_listener(String data) {
+        System.out.println(data);
+        System.out.println("------------------------------");
+        User user = new Gson().fromJson(data, User.class);
+        System.out.println(user.toString());
+        Redevable rd = new Redevable();
+        rd.setNom(user.getLastName());
+        rd.setPrenom(user.getFirstName());
+        rd.setCin(user.getCin());
+        rd = redevableDao.save(rd);
+        messagingTemplate.convertAndSend("/topic/messages", rd);
     }
 
 }

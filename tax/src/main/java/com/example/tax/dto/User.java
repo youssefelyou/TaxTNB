@@ -13,6 +13,7 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     private String password;
+    private String cin;
     private String username;
     private String tel;
     @Enumerated(EnumType.STRING)
